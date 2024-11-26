@@ -4,6 +4,7 @@ import pickle
 import tkinter as tk
 from tkinter import messagebox
 import time
+import os
 
 # Função para inicializar o tabuleiro do jogo com minas e células vazias
 def iniciar_tabuleiro(linhas, colunas, n_minas, primeira_jogada=None):
@@ -70,8 +71,9 @@ def carregar_jogo():
 
 # Classe que gerencia a lógica do jogo Campo Minado e a interface gráfica
 class CampoMinadoApp:
-    def __init__(self, master, linhas, colunas, bombas, tela_inicial):
+    def __init__(self, master, linhas, colunas, bombas, tela_inicial, jogador_atual):
         self.master = master
+        self.jogador_atual = jogador_atual
         self.LINHAS = linhas
         self.COLUNAS = colunas
         self.inicio_tempo = None  # Tempo de início do jogo
@@ -213,12 +215,7 @@ class CampoMinadoApp:
         self.revelar_bombas()  # Revela as minas
         self.master.after(2000, self.fechar_jogo)  # Fecha a janela após 2 segundos
         self.salvar_ranking(self.jogador_atual, self.tempo_total)
-
-
-class SistemaRanking:
-    def __init__(self):
-        self.arquivo_ranking = 'ranking.txt'
-
+    
     def salvar_ranking(self, nome, tempo):
         try:
             with open(self.arquivo_ranking, 'a') as f:
@@ -226,13 +223,26 @@ class SistemaRanking:
         except Exception as e:
             print(f"Erro ao salvar o ranking: {e}")
 
+
+class SistemaRanking:
+    def __init__(self):
+        self.arquivo_ranking = 'ranking.txt'
+        # Cria o arquivo de ranking se ele não existir
+        if not os.path.exists(self.arquivo_ranking):
+            with open(self.arquivo_ranking, 'w') as f:
+                pass #cria o arquivo vazio se não existir
+
+
     def exibir_ranking(self):
         try:
             with open(self.arquivo_ranking, 'r') as f:
                 ranking = f.readlines()
                 ranking.sort(key=lambda x: int(x.split(":")[1].split()[0]))  # Ordena pelo tempo
                 ranking_texto = "".join(ranking)
-                messagebox.showinfo("Ranking", ranking_texto)
+                if ranking_texto == "":
+                    messagebox.showinfo("Ranking", "Ainda não há dados no ranking.")
+                else:
+                    messagebox.showinfo("Ranking", ranking_texto)
         except FileNotFoundError:
             messagebox.showinfo("Ranking", "Ainda não há dados no ranking.")
 
@@ -380,10 +390,11 @@ class TelaInicial:
     def jogo_dificil(self):
         self.abrir_tela_jogo(15, 15, 30)
 
+    # Função para abrir a tela do jogo com parâmetros corretos
     def abrir_tela_jogo(self, linhas, colunas, bombas):
         self.master.destroy()
         root = tk.Tk()
-        CampoMinadoApp(root, linhas, colunas, bombas, self)
+        CampoMinadoApp(root, linhas, colunas, bombas, self, self.jogador)
         root.mainloop()
 
 
