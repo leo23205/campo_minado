@@ -157,10 +157,10 @@ class CampoMinadoApp:
             self.botoes[linha][coluna].config(text=str(minas), state="disabled")
 
             # Verifica se o jogador venceu
-            if verificar_vitoria(self.campo, self.visivel, self.LINHAS, self.COLUNAS):
-                self.revelar_bombas()
-                messagebox.showinfo("Vitória", "Parabéns! Você venceu!")
-                self.master.after(2000, self.fechar_jogo)
+        if verificar_vitoria(self.campo, self.visivel, self.LINHAS, self.COLUNAS):
+            self.revelar_bombas()
+            messagebox.showinfo("Vitória", "Parabéns! Você venceu!")
+            self.master.after(2000, self.fechar_jogo)
 
     # Função que revela todas as minas ao final do jogo
     def revelar_bombas(self):
