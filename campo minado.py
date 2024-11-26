@@ -156,7 +156,7 @@ class CampoMinadoApp:
             minas = self.visivel[linha][coluna]
             self.botoes[linha][coluna].config(text=str(minas), state="disabled")
 
-            # Verifica se o jogador venceu
+        # Verifica se o jogador venceu
         if verificar_vitoria(self.campo, self.visivel, self.LINHAS, self.COLUNAS):
             self.revelar_bombas()
             messagebox.showinfo("Vitória", "Parabéns! Você venceu!")
@@ -236,16 +236,7 @@ class SistemaRanking:
         except FileNotFoundError:
             messagebox.showinfo("Ranking", "Ainda não há dados no ranking.")
 
-class TelaInicial:
-    def __init__(self, master, jogador="Convidado"):
-        # ... código existente ...
-        self.ranking = SistemaRanking()  # Instância do sistema de ranking
-        # Botão para exibir o ranking
-        self.botao_ranking = tk.Button(self.master, text="Ranking", command=self.exibir_ranking)
-        self.botao_ranking.pack(pady=5)
 
-    def exibir_ranking(self):
-        self.ranking.exibir_ranking()  # Exibe o ranking
 
 # Adiciona sistema de cadastro usando arquivo de texto
 class SistemaCadastro:
