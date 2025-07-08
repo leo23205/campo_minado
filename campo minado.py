@@ -403,3 +403,5 @@ if __name__ == "__main__":
     root = tk.Tk()
     SistemaCadastro(root)
     root.mainloop()
+
+#by leleo
